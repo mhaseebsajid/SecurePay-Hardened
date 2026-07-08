@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SecurePay – Secure Digital Wallet System</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+  body { background-color: #07122a; color: #d9e2ff; font-family: 'Inter', sans-serif; }
+  .glass-card { background: rgba(17,34,64,0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
+  .glass-card:hover { border-color: rgba(100,255,218,0.3); box-shadow: 0 0 20px rgba(100,255,218,0.1); }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; }
+  .fill-icon { font-variation-settings: 'FILL' 1; }
+  /* Mobile menu */
+  #mobile-menu { display: none; }
+  #mobile-menu.open { display: flex; }
+</style>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "secondary-fixed-dim": "#b9c7e4","secondary-container": "#3c4962","on-surface-variant": "#bacac3",
+          "on-tertiary": "#20304f","surface-container": "#151f37","surface-container-highest": "#2a344e",
+          "background": "#07122a","on-primary": "#00382d","tertiary-fixed-dim": "#b6c6ed","secondary": "#b9c7e4",
+          "on-secondary": "#233148","on-tertiary-fixed": "#091b39","on-error-container": "#ffdad6",
+          "on-secondary-fixed": "#0d1c32","surface-bright": "#2f3952","outline-variant": "#3c4a45",
+          "surface-container-high": "#1f2942","on-surface": "#d9e2ff","surface": "#07122a","on-background": "#d9e2ff",
+          "secondary-fixed": "#d6e3ff","primary-fixed-dim": "#38debb","tertiary": "#ffffff","error": "#ffb4ab",
+          "primary": "#ffffff","error-container": "#93000a","inverse-surface": "#d9e2ff","on-primary-fixed": "#002019",
+          "primary-container": "#5ffbd6","inverse-on-surface": "#263049","surface-dim": "#07122a","on-error": "#690005",
+          "on-primary-container": "#00725e","tertiary-fixed": "#d8e2ff","surface-container-low": "#101b33",
+          "outline": "#85948e","primary-fixed": "#5ffbd6","on-secondary-container": "#abb9d6",
+          "surface-variant": "#2a344e","inverse-primary": "#006b58","surface-container-lowest": "#030d25"
+        },
+        borderRadius: { DEFAULT: "0.25rem","lg": "0.5rem","xl": "0.75rem","full": "9999px" },
+        spacing: { "gutter": "1.5rem","container-max": "1280px" },
+        fontFamily: { "headline-sm": ["Geist"],"label-md": ["Geist"],"headline-lg-mobile": ["Geist"],"body-md": ["Inter"],"headline-md": ["Geist"],"headline-lg": ["Geist"],"body-lg": ["Inter"],"body-sm": ["Inter"],"code-md": ["Geist"] },
+        fontSize: {
+          "headline-sm": ["24px",{"lineHeight":"1.3","letterSpacing":"0em","fontWeight":"500"}],
+          "label-md": ["12px",{"lineHeight":"1","letterSpacing":"0.1em","fontWeight":"600"}],
+          "headline-lg-mobile": ["32px",{"lineHeight":"1.2","letterSpacing":"-0.01em","fontWeight":"600"}],
+          "body-md": ["16px",{"lineHeight":"1.5","letterSpacing":"0.01em","fontWeight":"400"}],
+          "headline-md": ["32px",{"lineHeight":"1.2","letterSpacing":"-0.01em","fontWeight":"500"}],
+          "headline-lg": ["48px",{"lineHeight":"1.1","letterSpacing":"-0.02em","fontWeight":"600"}],
+          "body-lg": ["18px",{"lineHeight":"1.6","letterSpacing":"0.01em","fontWeight":"400"}],
+          "body-sm": ["14px",{"lineHeight":"1.5","letterSpacing":"0.02em","fontWeight":"400"}],
+          "code-md": ["14px",{"lineHeight":"1.4","letterSpacing":"0em","fontWeight":"400"}]
+        }
+      }
+    }
+  }
+</script>
+</head>
+<body class="bg-background text-on-background">
+
+<!-- ═══════════════════════════════ NAVBAR ═══════════════════════════════ -->
+<header class="fixed top-0 w-full z-50 bg-surface/70 backdrop-blur-xl border-b border-white/10 shadow-[0_0_20px_rgba(100,255,218,0.1)]">
+  <nav class="flex justify-between items-center px-gutter py-4 max-w-container-max mx-auto">
+    <a href="index.html" class="font-headline-sm text-headline-sm font-bold text-primary-fixed">SecurePay</a>
+
+    <!-- Desktop Nav -->
+    <div class="hidden md:flex items-center gap-8">
+      <a class="font-body-md text-body-md text-primary-fixed border-b-2 border-primary-fixed pb-1" href="index.html">Home</a>
+      <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary-fixed transition-colors duration-300" href="index.html#features">Features</a>
+      <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary-fixed transition-colors duration-300" href="dashboard.html">Dashboard</a>
+      <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary-fixed transition-colors duration-300" href="security.html">Security</a>
+      <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary-fixed transition-colors duration-300" href="index.html#about">About</a>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <!-- Auth-aware buttons -->
+      <div id="nav-auth-area" class="flex items-center gap-3">
+        <a href="login.html" class="hidden md:block border border-primary-fixed text-primary-fixed px-5 py-2 rounded-full font-label-md text-label-md hover:bg-primary-fixed/10 transition-all active:scale-95">Login</a>
+        <a href="login.html#register" class="bg-primary-fixed text-on-primary-fixed font-label-md text-label-md px-6 py-2 rounded-full hover:shadow-[0_0_15px_rgba(100,255,218,0.4)] transition-all active:scale-95">Register</a>
+      </div>
+      <!-- Hamburger -->
+      <button id="menu-btn" class="md:hidden text-on-surface-variant hover:text-primary-fixed transition-colors" onclick="toggleMenu()">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="flex-col gap-4 px-gutter pb-6 bg-surface-container-low border-b border-white/10">
+    <a class="font-body-md text-body-md text-primary-fixed py-2" href="index.html">Home</a>
+    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary-fixed py-2 transition-colors" href="index.html#features">Features</a>
+    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary-fixed py-2 transition-colors" href="dashboard.html">Dashboard</a>
+    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary-fixed py-2 transition-colors" href="security.html">Security</a>
+    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary-fixed py-2 transition-colors" href="index.html#about">About</a>
+    <a href="login.html" class="font-body-md text-body-md text-on-surface-variant hover:text-primary-fixed py-2 transition-colors">Login</a>
+  </div>
+</header>
+
+<main>
+<!-- ═══════════════════════════════ HERO ═══════════════════════════════ -->
+<section class="relative min-h-screen pt-32 pb-20 flex items-center overflow-hidden">
+  <div class="absolute inset-0 z-0">
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary-fixed/5 rounded-full blur-[120px]"></div>
+    <div class="absolute top-1/4 right-0 w-[400px] h-[400px] bg-secondary-container/10 rounded-full blur-[100px]"></div>
+  </div>
+  <div class="container mx-auto px-gutter relative z-10">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+      <div class="space-y-8">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary-fixed/20 bg-primary-fixed/5 text-primary-fixed font-label-md text-label-md uppercase">
+          <span class="material-symbols-outlined text-[14px]">verified_user</span>
+          Military-Grade Security
+        </div>
+        <h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary">
+          Secure Digital Wallet <br class="hidden md:block"/> System
+        </h1>
+        <p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl">
+          Fast, secure, and trusted digital financial transactions with advanced cybersecurity protection.
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <a href="login.html" class="bg-primary-fixed text-on-primary-fixed px-8 py-4 rounded-lg font-label-md text-label-md hover:shadow-[0_0_20px_rgba(100,255,218,0.3)] transition-all active:scale-95">LOGIN</a>
+          <a href="login.html#register" class="border border-primary-fixed text-primary-fixed px-8 py-4 rounded-lg font-label-md text-label-md hover:bg-primary-fixed/5 transition-all active:scale-95">REGISTER NOW</a>
+          <a href="index.html#about" class="border border-primary-fixed text-primary-fixed px-8 py-4 rounded-lg font-label-md text-label-md hover:bg-primary-fixed/5 transition-all active:scale-95">LEARN MORE</a>
+        </div>
+      </div>
+      <div class="relative group">
+        <div class="glass-card rounded-2xl p-8 border-primary-fixed/20 relative overflow-hidden group-hover:border-primary-fixed/40 transition-all duration-500">
+          <img class="rounded-xl w-full h-auto object-cover opacity-80 group-hover:opacity-100 transition-opacity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBG0u7sg59VQ0Np6KluZagr07jb3S8X6PdAdDEZYiXg05_4ww5PCHR1uNLqzvs-HwNhKXaIXjGMa-Wp-WQMIZoPWPglvbQlYXsR4HtYELTqyO1yD3C5flEWraLwFXjxgJwuaMfpS5w7cGgR4fY2pkD0K8S4bUItqfUsVVnOcnCGnKm_qey21MkjjE0AXt4jnkVHoNZ_bOnoQcnqafGamYPDmRw_NwVdSnT-R2xgCEh50BIIuwGc7PODX4h42IqZTe4lklX23MDkRBA" alt="SecurePay Dashboard"/>
+          <div class="absolute -bottom-4 -right-4 bg-primary-container text-on-primary-container p-6 rounded-2xl shadow-2xl">
+            <span class="material-symbols-outlined text-[48px] fill-icon">shield_lock</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ ABOUT ═══════════════════════════════ -->
+<section id="about" class="py-24 bg-surface-container-lowest">
+  <div class="container mx-auto px-gutter text-center">
+    <div class="max-w-3xl mx-auto space-y-6">
+      <h2 class="font-headline-md text-headline-md text-primary">Academic Excellence in Cybersecurity</h2>
+      <div class="h-1 w-20 bg-primary-fixed mx-auto rounded-full"></div>
+      <p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+        This project is developed for a Network Security and Information Assurance course to demonstrate secure digital wallet architecture, attack simulation, and implementation of cybersecurity controls. It represents the intersection of financial technology and rigorous defensive infrastructure.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ FEATURES ═══════════════════════════ -->
+<section id="features" class="py-24 container mx-auto px-gutter">
+  <div class="mb-16">
+    <h2 class="font-headline-md text-headline-md text-primary mb-4">Fortified Features</h2>
+    <p class="font-body-md text-body-md text-on-surface-variant">Multiple layers of protection for every single transaction.</p>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="glass-card p-8 rounded-xl flex flex-col gap-4 group transition-all duration-300">
+      <div class="w-12 h-12 rounded-lg bg-primary-fixed/10 flex items-center justify-center text-primary-fixed group-hover:bg-primary-fixed group-hover:text-on-primary-fixed transition-all">
+        <span class="material-symbols-outlined text-[28px]">payments</span>
+      </div>
+      <h3 class="font-headline-sm text-headline-sm text-primary">Secure Transactions</h3>
+      <p class="font-body-sm text-body-sm text-on-surface-variant">Validated through multi-node consensus algorithms to prevent double-spending and ledger manipulation.</p>
+    </div>
+    <div class="glass-card p-8 rounded-xl flex flex-col gap-4 group transition-all duration-300">
+      <div class="w-12 h-12 rounded-lg bg-primary-fixed/10 flex items-center justify-center text-primary-fixed group-hover:bg-primary-fixed group-hover:text-on-primary-fixed transition-all">
+        <span class="material-symbols-outlined text-[28px]">lock_open</span>
+      </div>
+      <h3 class="font-headline-sm text-headline-sm text-primary">End-to-End Encryption</h3>
+      <p class="font-body-sm text-body-sm text-on-surface-variant">AES-256 bit encryption protocols ensuring your sensitive financial data remains unreadable to third parties.</p>
+    </div>
+    <div class="glass-card p-8 rounded-xl flex flex-col gap-4 group transition-all duration-300">
+      <div class="w-12 h-12 rounded-lg bg-primary-fixed/10 flex items-center justify-center text-primary-fixed group-hover:bg-primary-fixed group-hover:text-on-primary-fixed transition-all">
+        <span class="material-symbols-outlined text-[28px]">gpp_maybe</span>
+      </div>
+      <h3 class="font-headline-sm text-headline-sm text-primary">Fraud Detection</h3>
+      <p class="font-body-sm text-body-sm text-on-surface-variant">AI-powered behavioral analysis identifies anomalous spending patterns and potential account takeovers in real-time.</p>
+    </div>
+    <div class="glass-card p-8 rounded-xl flex flex-col gap-4 group transition-all duration-300">
+      <div class="w-12 h-12 rounded-lg bg-primary-fixed/10 flex items-center justify-center text-primary-fixed group-hover:bg-primary-fixed group-hover:text-on-primary-fixed transition-all">
+        <span class="material-symbols-outlined text-[28px]">vibration</span>
+      </div>
+      <h3 class="font-headline-sm text-headline-sm text-primary">Multi-Factor Auth</h3>
+      <p class="font-body-sm text-body-sm text-on-surface-variant">Biometric, hardware token, and SMS verification layers to ensure only authorized owners can access assets.</p>
+    </div>
+    <div class="glass-card p-8 rounded-xl flex flex-col gap-4 group transition-all duration-300">
+      <div class="w-12 h-12 rounded-lg bg-primary-fixed/10 flex items-center justify-center text-primary-fixed group-hover:bg-primary-fixed group-hover:text-on-primary-fixed transition-all">
+        <span class="material-symbols-outlined text-[28px]">monitoring</span>
+      </div>
+      <h3 class="font-headline-sm text-headline-sm text-primary">Real-Time Monitoring</h3>
+      <p class="font-body-sm text-body-sm text-on-surface-variant">A persistent health check system that monitors network traffic and node integrity 24/7/365.</p>
+    </div>
+    <div class="glass-card p-8 rounded-xl flex flex-col gap-4 group transition-all duration-300">
+      <div class="w-12 h-12 rounded-lg bg-primary-fixed/10 flex items-center justify-center text-primary-fixed group-hover:bg-primary-fixed group-hover:text-on-primary-fixed transition-all">
+        <span class="material-symbols-outlined text-[28px]">admin_panel_settings</span>
+      </div>
+      <h3 class="font-headline-sm text-headline-sm text-primary">Role-Based Access</h3>
+      <p class="font-body-sm text-body-sm text-on-surface-variant">Granular permission structures that limit operational capabilities based on user identity and verified status.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ STATS ═══════════════════════════════ -->
+<section class="py-20 border-y border-white/5">
+  <div class="container mx-auto px-gutter">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
+      <div><div class="font-headline-lg text-headline-lg text-primary-fixed">10M+</div><div class="font-body-sm text-body-sm text-on-surface-variant uppercase tracking-widest mt-2">Transactions</div></div>
+      <div><div class="font-headline-lg text-headline-lg text-primary-fixed">99.9%</div><div class="font-body-sm text-body-sm text-on-surface-variant uppercase tracking-widest mt-2">Uptime</div></div>
+      <div><div class="font-headline-lg text-headline-lg text-primary-fixed">0</div><div class="font-body-sm text-body-sm text-on-surface-variant uppercase tracking-widest mt-2">Breaches</div></div>
+      <div><div class="font-headline-lg text-headline-lg text-primary-fixed">256</div><div class="font-body-sm text-body-sm text-on-surface-variant uppercase tracking-widest mt-2">Bit Encryption</div></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ═══════════════════════════════ FOOTER ═══════════════════════════════ -->
+<footer class="w-full py-12 bg-surface-container-lowest border-t border-white/10">
+  <div class="flex flex-col md:flex-row justify-between items-center px-gutter max-w-container-max mx-auto gap-8">
+    <div class="flex flex-col items-center md:items-start gap-2">
+      <div class="font-headline-sm text-headline-sm text-primary-fixed">SecurePay</div>
+      <p class="font-body-sm text-body-sm text-on-surface-variant">© 2024 SecurePay. All rights reserved.</p>
+    </div>
+    <div class="flex flex-wrap justify-center gap-8">
+      <a class="font-body-sm text-body-sm text-on-surface-variant hover:text-tertiary transition-colors" href="#">Contact</a>
+      <a class="font-body-sm text-body-sm text-on-surface-variant hover:text-tertiary transition-colors" href="#">Privacy Policy</a>
+      <a class="font-body-sm text-body-sm text-on-surface-variant hover:text-tertiary transition-colors" href="#">Terms of Service</a>
+      <a class="font-body-sm text-body-sm text-on-surface-variant hover:text-tertiary transition-colors" href="security.html">Security Center</a>
+    </div>
+    <div class="flex gap-4">
+      <button class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:border-primary-fixed hover:text-primary-fixed transition-all"><span class="material-symbols-outlined text-[20px]">public</span></button>
+      <button class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:border-primary-fixed hover:text-primary-fixed transition-all"><span class="material-symbols-outlined text-[20px]">terminal</span></button>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ─── API Config ───────────────────────────────────
+  const API_BASE = 'http://localhost:5000/api';
+
+  function toggleMenu() {
+    const menu = document.getElementById('mobile-menu');
+    menu.classList.toggle('open');
+  }
+
+  // ─── Update nav based on auth state ──────────────
+  function updateNavAuth() {
+    const token = localStorage.getItem('sp_token');
+    const user = JSON.parse(localStorage.getItem('sp_user') || 'null');
+    const area = document.getElementById('nav-auth-area');
+    if (token && user) {
+      area.innerHTML = `
+        <a href="dashboard.html" class="hidden md:flex items-center gap-2 text-primary-fixed font-label-md text-label-md border border-primary-fixed px-5 py-2 rounded-full hover:bg-primary-fixed/10 transition-all">
+          <span class="material-symbols-outlined text-[16px]">account_circle</span>${user.fullName.split(' ')[0]}
+        </a>
+        <button onclick="logout()" class="bg-primary-fixed text-on-primary-fixed font-label-md text-label-md px-5 py-2 rounded-full hover:shadow-[0_0_15px_rgba(100,255,218,0.4)] transition-all active:scale-95">Logout</button>
+      `;
+    }
+  }
+
+  async function logout() {
+    try {
+      const token = localStorage.getItem('sp_token');
+      await fetch(`${API_BASE}/logout`, { method: 'POST', headers: { Authorization: `Bearer ${token}` } });
+    } catch (_) {}
+    localStorage.removeItem('sp_token');
+    localStorage.removeItem('sp_user');
+    window.location.reload();
+  }
+
+  updateNavAuth();
+</script>
+</body>
+</html>

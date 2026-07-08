@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SecurePay – Login & Register</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>
+  .glass-pane { background: rgba(17,34,64,0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
+  .cyber-grid { background-image: linear-gradient(rgba(100,255,218,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(100,255,218,0.03) 1px, transparent 1px); background-size: 40px 40px; }
+  .glow-hover:hover { box-shadow: 0 0 20px rgba(100,255,218,0.15); border-color: rgba(255,255,255,0.3); }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; }
+  .error-msg { color: #ffb4ab; font-size: 13px; margin-top: 4px; display: none; }
+  .success-msg { color: #5ffbd6; font-size: 13px; margin-top: 4px; display: none; }
+  #mobile-menu { display: none; }
+  #mobile-menu.open { display: flex; }
+</style>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "secondary-fixed-dim":"#b9c7e4","secondary-container":"#3c4962","on-surface-variant":"#bacac3",
+          "on-tertiary":"#20304f","surface-container":"#151f37","surface-container-highest":"#2a344e",
+          "background":"#07122a","on-primary":"#00382d","secondary":"#b9c7e4","on-secondary":"#233148",
+          "on-error-container":"#ffdad6","on-secondary-fixed":"#0d1c32","surface-bright":"#2f3952",
+          "outline-variant":"#3c4a45","surface-container-high":"#1f2942","on-surface":"#d9e2ff","surface":"#07122a",
+          "on-background":"#d9e2ff","secondary-fixed":"#d6e3ff","primary-fixed-dim":"#38debb","tertiary":"#ffffff",
+          "error":"#ffb4ab","primary":"#ffffff","error-container":"#93000a","inverse-surface":"#d9e2ff",
+          "on-primary-fixed":"#002019","primary-container":"#5ffbd6","inverse-on-surface":"#263049",
+          "surface-dim":"#07122a","on-error":"#690005","on-primary-container":"#00725e","tertiary-fixed":"#d8e2ff",
+          "surface-container-low":"#101b33","outline":"#85948e","primary-fixed":"#5ffbd6",
+          "on-secondary-container":"#abb9d6","surface-variant":"#2a344e","inverse-primary":"#006b58",
+          "surface-container-lowest":"#030d25"
+        },
+        borderRadius: { DEFAULT:"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px" },
+        spacing: { "gutter":"1.5rem","container-max":"1280px" },
+        fontFamily: { "headline-sm":["Geist"],"label-md":["Geist"],"headline-lg-mobile":["Geist"],"body-md":["Inter"],"headline-md":["Geist"],"headline-lg":["Geist"],"body-lg":["Inter"],"body-sm":["Inter"],"code-md":["Geist"] },
+        fontSize: {
+          "headline-sm":["24px",{"lineHeight":"1.3","letterSpacing":"0em","fontWeight":"500"}],
+          "label-md":["12px",{"lineHeight":"1","letterSpacing":"0.1em","fontWeight":"600"}],
+          "headline-lg-mobile":["32px",{"lineHeight":"1.2","letterSpacing":"-0.01em","fontWeight":"600"}],
+          "body-md":["16px",{"lineHeight":"1.5","letterSpacing":"0.01em","fontWeight":"400"}],
+          "headline-md":["32px",{"lineHeight":"1.2","letterSpacing":"-0.01em","fontWeight":"500"}],
+          "headline-lg":["48px",{"lineHeight":"1.1","letterSpacing":"-0.02em","fontWeight":"600"}],
+          "body-lg":["18px",{"lineHeight":"1.6","letterSpacing":"0.01em","fontWeight":"400"}],
+          "body-sm":["14px",{"lineHeight":"1.5","letterSpacing":"0.02em","fontWeight":"400"}],
+          "code-md":["14px",{"lineHeight":"1.4","letterSpacing":"0em","fontWeight":"400"}]
+        }
+      }
+    }
+  }
+</script>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md overflow-x-hidden">
+
+<!-- ═══════════════════════════════ NAVBAR ═══════════════════════════════ -->
+<header class="fixed top-0 w-full bg-surface/70 backdrop-blur-xl border-b border-white/10 shadow-[0_0_20px_rgba(100,255,218,0.1)] z-50">
+  <div class="flex justify-between items-center px-gutter py-4 max-w-container-max mx-auto">
+    <a href="index.html" class="font-headline-sm text-headline-sm font-bold text-primary-fixed">SecurePay</a>
+    <nav class="hidden md:flex gap-8 items-center">
+      <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary-fixed transition-colors duration-300" href="index.html">Home</a>
+      <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary-fixed transition-colors duration-300" href="index.html#features">Features</a>
+      <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary-fixed transition-colors duration-300" href="dashboard.html">Dashboard</a>
+      <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary-fixed transition-colors duration-300" href="security.html">Security</a>
+      <a class="font-body-md text-body-md text-primary-fixed border-b-2 border-primary-fixed pb-1" href="login.html">Login</a>
+    </nav>
+    <button class="md:hidden text-on-surface-variant hover:text-primary-fixed transition-colors" onclick="document.getElementById('mobile-menu').classList.toggle('open')">
+      <span class="material-symbols-outlined">menu</span>
+    </button>
+  </div>
+  <div id="mobile-menu" class="flex-col gap-4 px-gutter pb-6 bg-surface-container-low border-b border-white/10">
+    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary-fixed py-2" href="index.html">Home</a>
+    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary-fixed py-2" href="index.html#features">Features</a>
+    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary-fixed py-2" href="dashboard.html">Dashboard</a>
+    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary-fixed py-2" href="security.html">Security</a>
+    <a class="font-body-md text-body-md text-primary-fixed py-2" href="login.html">Login</a>
+  </div>
+</header>
+
+<main class="flex-grow pt-24 pb-12 cyber-grid relative overflow-hidden">
+  <div class="absolute top-1/4 -left-24 w-96 h-96 bg-primary-fixed/5 rounded-full blur-[100px]"></div>
+  <div class="absolute bottom-1/4 -right-24 w-96 h-96 bg-secondary-fixed-dim/5 rounded-full blur-[100px]"></div>
+
+  <div class="max-w-container-max mx-auto px-gutter grid lg:grid-cols-2 gap-12 items-center min-h-[750px]">
+
+    <!-- Left Info Panel -->
+    <div class="space-y-8 order-2 lg:order-1">
+      <h1 class="font-headline-lg text-headline-lg text-primary-fixed max-w-lg">Advanced Cryptographic Infrastructure</h1>
+      <p class="font-body-lg text-body-lg text-on-surface-variant max-w-md">Experience institutional-grade security for your digital assets.</p>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="glass-pane p-6 rounded-xl">
+          <span class="material-symbols-outlined text-primary-fixed mb-2" style="font-variation-settings:'FILL' 1">shield</span>
+          <div class="font-headline-sm text-headline-sm text-on-surface">AES-256</div>
+          <div class="font-label-md text-label-md text-on-surface-variant uppercase">Encryption Standard</div>
+        </div>
+        <div class="glass-pane p-6 rounded-xl">
+          <span class="material-symbols-outlined text-primary-fixed mb-2" style="font-variation-settings:'FILL' 1">verified_user</span>
+          <div class="font-headline-sm text-headline-sm text-on-surface">99.9%</div>
+          <div class="font-label-md text-label-md text-on-surface-variant uppercase">Uptime Security</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-3 bg-primary-container/10 border border-primary-container/20 p-4 rounded-lg">
+        <span class="material-symbols-outlined text-primary-fixed" style="font-variation-settings:'FILL' 1">lock</span>
+        <span class="font-body-sm text-body-sm text-primary-fixed">Protected with secure JWT authentication</span>
+      </div>
+    </div>
+
+    <!-- Login Form -->
+    <div class="order-1 lg:order-2 flex justify-center lg:justify-end">
+      <div class="glass-pane w-full max-w-md p-8 md:p-12 rounded-2xl glow-hover transition-all duration-500">
+        <div class="mb-8">
+          <h2 class="font-headline-md text-headline-md text-on-surface">Sign In</h2>
+          <p class="font-body-sm text-body-sm text-on-surface-variant mt-2">Enter your credentials to access your secure dashboard.</p>
+        </div>
+
+        <!-- Login Alert Area -->
+        <div id="login-alert" class="hidden mb-4 p-4 rounded-lg border"></div>
+
+        <form id="login-form" class="space-y-6" onsubmit="handleLogin(event)">
+          <div class="space-y-2">
+            <label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Email Address</label>
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">mail</span>
+              <input id="login-email" class="w-full bg-surface-container-low border border-white/10 rounded-lg py-3 pl-10 pr-4 text-on-surface focus:outline-none focus:border-primary-fixed focus:ring-1 focus:ring-primary-fixed transition-all font-body-md" placeholder="name@company.com" type="email" required/>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Password</label>
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">lock_open</span>
+              <input id="login-password" class="w-full bg-surface-container-low border border-white/10 rounded-lg py-3 pl-10 pr-4 text-on-surface focus:outline-none focus:border-primary-fixed focus:ring-1 focus:ring-primary-fixed transition-all font-body-md" placeholder="••••••••" type="password" required/>
+            </div>
+          </div>
+          <div class="flex items-center justify-between">
+            <label class="flex items-center gap-2 cursor-pointer group">
+              <input class="rounded border-white/10 bg-surface-container-low text-primary-fixed" type="checkbox"/>
+              <span class="font-body-sm text-body-sm text-on-surface-variant group-hover:text-on-surface transition-colors">Remember Me</span>
+            </label>
+            <a class="font-body-sm text-body-sm text-primary-fixed hover:underline" href="#">Forgot Password?</a>
+          </div>
+          <button id="login-btn" class="w-full bg-primary-fixed text-on-primary-fixed font-label-md text-label-md uppercase tracking-widest py-4 rounded-lg active:scale-95 transition-transform shadow-[0_0_15px_rgba(95,251,214,0.3)] hover:shadow-[0_0_25px_rgba(95,251,214,0.5)] flex items-center justify-center gap-2" type="submit">
+            <span id="login-btn-text">Login</span>
+            <span id="login-spinner" class="hidden material-symbols-outlined animate-spin text-[18px]">progress_activity</span>
+          </button>
+          <div class="text-center pt-4">
+            <p class="font-body-sm text-body-sm text-on-surface-variant">
+              Don't have an account? <a class="text-primary-fixed font-bold hover:underline" href="#register">Create Account</a>
+            </p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ REGISTER SECTION ═══ -->
+  <div class="max-w-container-max mx-auto px-gutter py-24" id="register">
+    <div class="glass-pane rounded-2xl overflow-hidden grid md:grid-cols-5 min-h-[600px]">
+      <div class="md:col-span-2 relative hidden md:block">
+        <img alt="Security Infrastructure" class="absolute inset-0 w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuz5NweSI70yGHsemwUVL0oQ953mHkVTd1jF7aRx2GXkVn-7B9WTNh2hSoF-y3Utq4UnHdZ8IHesAkIFRunouHuckzs1Ex2RHukC27FaCtqdeS1jGKuygIkf5YOctFDRZkc3sF1CAcx3UjCdZd2pmPty5_1EtZJwolRU1HU1_NJmD1xOYOXDIxO4DSSeDBE_lvg6Dlg-F7JxN6VPi6OU_RS_aqOZWt3g4ztY_OCHo6Of_Hch3-nXaMtB8qdy3T_Z8EJcRb4C0_PkE"/>
+        <div class="absolute inset-0 bg-gradient-to-r from-surface-container-lowest/80 to-transparent flex flex-col justify-end p-12">
+          <h3 class="font-headline-md text-headline-md text-primary-fixed mb-4">Join the Network</h3>
+          <p class="font-body-md text-body-md text-white/80">Scale your financial operations with the world's most secure transaction engine.</p>
+        </div>
+      </div>
+      <div class="md:col-span-3 p-8 md:p-16 flex flex-col justify-center">
+        <div class="mb-10">
+          <h2 class="font-headline-md text-headline-md text-on-surface">Registration</h2>
+          <p class="font-body-sm text-body-sm text-on-surface-variant mt-2">Create your identity in the SecurePay ecosystem.</p>
+        </div>
+
+        <!-- Register Alert -->
+        <div id="register-alert" class="hidden mb-4 p-4 rounded-lg border"></div>
+
+        <form id="register-form" class="grid grid-cols-1 md:grid-cols-2 gap-6" onsubmit="handleRegister(event)">
+          <div class="space-y-2 col-span-2">
+            <label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Full Name</label>
+            <input id="reg-name" class="w-full bg-surface-container-low border border-white/10 rounded-lg py-3 px-4 text-on-surface focus:outline-none focus:border-primary-fixed focus:ring-1 focus:ring-primary-fixed transition-all font-body-md" placeholder="John Doe" type="text" required/>
+          </div>
+          <div class="space-y-2">
+            <label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Email</label>
+            <input id="reg-email" class="w-full bg-surface-container-low border border-white/10 rounded-lg py-3 px-4 text-on-surface focus:outline-none focus:border-primary-fixed focus:ring-1 focus:ring-primary-fixed transition-all font-body-md" placeholder="john@example.com" type="email" required/>
+          </div>
+          <div class="space-y-2">
+            <label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Phone</label>
+            <input id="reg-phone" class="w-full bg-surface-container-low border border-white/10 rounded-lg py-3 px-4 text-on-surface focus:outline-none focus:border-primary-fixed focus:ring-1 focus:ring-primary-fixed transition-all font-body-md" placeholder="+1 (555) 000-0000" type="tel" required/>
+          </div>
+          <div class="space-y-2">
+            <label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Password</label>
+            <input id="reg-password" class="w-full bg-surface-container-low border border-white/10 rounded-lg py-3 px-4 text-on-surface focus:outline-none focus:border-primary-fixed focus:ring-1 focus:ring-primary-fixed transition-all font-body-md" placeholder="••••••••" type="password" required/>
+          </div>
+          <div class="space-y-2">
+            <label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Confirm Password</label>
+            <input id="reg-confirm" class="w-full bg-surface-container-low border border-white/10 rounded-lg py-3 px-4 text-on-surface focus:outline-none focus:border-primary-fixed focus:ring-1 focus:ring-primary-fixed transition-all font-body-md" placeholder="••••••••" type="password" required/>
+          </div>
+          <div class="col-span-2 pt-4">
+            <button id="reg-btn" class="w-full bg-transparent border border-primary-fixed text-primary-fixed font-label-md text-label-md uppercase tracking-widest py-4 rounded-lg active:scale-95 transition-all hover:bg-primary-fixed/10 flex items-center justify-center gap-2" type="submit">
+              <span id="reg-btn-text">Create Account</span>
+              <span id="reg-spinner" class="hidden material-symbols-outlined animate-spin text-[18px]">progress_activity</span>
+            </button>
+            <p class="text-center font-body-sm text-body-sm text-on-surface-variant mt-6">
+              By registering, you agree to our <a class="text-on-surface underline" href="#">Terms of Service</a> and <a class="text-on-surface underline" href="#">Security Policy</a>.
+            </p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="w-full py-12 bg-surface-container-lowest border-t border-white/10">
+  <div class="flex flex-col md:flex-row justify-between items-center px-gutter max-w-container-max mx-auto gap-8">
+    <div class="flex flex-col items-center md:items-start gap-2">
+      <a href="index.html" class="font-headline-sm text-headline-sm text-primary-fixed">SecurePay</a>
+      <p class="font-body-sm text-body-sm text-on-surface-variant">© 2024 SecurePay. All rights reserved.</p>
+    </div>
+    <div class="flex flex-wrap justify-center gap-x-8 gap-y-4">
+      <a class="font-body-sm text-body-sm text-on-surface-variant hover:text-tertiary transition-colors" href="#">Contact</a>
+      <a class="font-body-sm text-body-sm text-on-surface-variant hover:text-tertiary transition-colors" href="#">Privacy Policy</a>
+      <a class="font-body-sm text-body-sm text-on-surface-variant hover:text-tertiary transition-colors" href="#">Terms of Service</a>
+      <a class="font-body-sm text-body-sm text-on-surface-variant hover:text-tertiary transition-colors" href="security.html">Security Center</a>
+    </div>
+    <div class="flex gap-4">
+      <span class="material-symbols-outlined text-on-surface-variant hover:text-primary-fixed cursor-pointer transition-colors">public</span>
+      <span class="material-symbols-outlined text-on-surface-variant hover:text-primary-fixed cursor-pointer transition-colors">shield_with_heart</span>
+      <span class="material-symbols-outlined text-on-surface-variant hover:text-primary-fixed cursor-pointer transition-colors">lock_person</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const API_BASE = 'http://localhost:5000/api';
+
+  // Redirect if already logged in
+  if (localStorage.getItem('sp_token')) {
+    const hash = window.location.hash;
+    if (!hash || hash !== '#register') window.location.href = 'dashboard.html';
+  }
+
+  // ─── Show Alert ───────────────────────────────────
+  function showAlert(id, msg, type = 'error') {
+    const el = document.getElementById(id);
+    el.className = 'mb-4 p-4 rounded-lg border flex items-start gap-3';
+    if (type === 'error') {
+      el.classList.add('border-error/30', 'bg-error-container/20');
+      el.innerHTML = `<span class="material-symbols-outlined text-error text-[18px] mt-0.5" style="font-variation-settings:'FILL' 1">error</span><span class="text-error font-body-sm text-body-sm">${msg}</span>`;
+    } else if (type === 'warning') {
+      el.classList.add('border-yellow-500/30', 'bg-yellow-900/20');
+      el.innerHTML = `<span class="material-symbols-outlined text-yellow-400 text-[18px] mt-0.5" style="font-variation-settings:'FILL' 1">warning</span><span class="text-yellow-300 font-body-sm text-body-sm">${msg}</span>`;
+    } else {
+      el.classList.add('border-primary-fixed/30', 'bg-primary-container/10');
+      el.innerHTML = `<span class="material-symbols-outlined text-primary-fixed text-[18px] mt-0.5" style="font-variation-settings:'FILL' 1">check_circle</span><span class="text-primary-fixed font-body-sm text-body-sm">${msg}</span>`;
+    }
+    el.classList.remove('hidden');
+  }
+
+  function hideAlert(id) { document.getElementById(id).classList.add('hidden'); }
+  function setLoading(btnId, spinnerId, textId, loading) {
+    document.getElementById(btnId).disabled = loading;
+    document.getElementById(spinnerId).classList.toggle('hidden', !loading);
+    document.getElementById(textId).textContent = loading ? 'Please wait...' : (btnId === 'login-btn' ? 'Login' : 'Create Account');
+  }
+
+  // ─── LOGIN ────────────────────────────────────────
+  async function handleLogin(e) {
+    e.preventDefault();
+    hideAlert('login-alert');
+    const email = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    if (!email || !password) return showAlert('login-alert', 'Please fill in all fields.');
+
+    setLoading('login-btn', 'login-spinner', 'login-btn-text', true);
+    try {
+      const res = await fetch(`${API_BASE}/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+      if (!res.ok) return showAlert('login-alert', data.message || 'Login failed. Please try again.');
+
+      localStorage.setItem('sp_token', data.token);
+      localStorage.setItem('sp_user', JSON.stringify(data.user));
+      showAlert('login-alert', `Welcome back, ${data.user.fullName}! Redirecting...`, 'success');
+      setTimeout(() => window.location.href = 'dashboard.html', 1200);
+    } catch (err) {
+      showAlert('login-alert', 'Cannot connect to server. Make sure the backend is running on port 5000.');
+    } finally {
+      setLoading('login-btn', 'login-spinner', 'login-btn-text', false);
+    }
+  }
+
+  // ─── REGISTER ────────────────────────────────────
+  async function handleRegister(e) {
+    e.preventDefault();
+    hideAlert('register-alert');
+    const fullName = document.getElementById('reg-name').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
+    const phone = document.getElementById('reg-phone').value.trim();
+    const password = document.getElementById('reg-password').value;
+    const confirm = document.getElementById('reg-confirm').value;
+
+    if (!fullName || !email || !phone || !password) return showAlert('register-alert', 'All fields are required.');
+    if (password !== confirm) return showAlert('register-alert', 'Passwords do not match.');
+    if (password.length < 8) return showAlert('register-alert', 'Password must be at least 8 characters.');
+
+    setLoading('reg-btn', 'reg-spinner', 'reg-btn-text', true);
+    try {
+      const res = await fetch(`${API_BASE}/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fullName, email, phone, password })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        const msg = data.errors ? data.errors.map(e => e.msg).join(', ') : data.message;
+        return showAlert('register-alert', msg || 'Registration failed.');
+      }
+
+      localStorage.setItem('sp_token', data.token);
+      localStorage.setItem('sp_user', JSON.stringify(data.user));
+
+      if (data.alert) {
+        showAlert('register-alert', `Account created! ⚠️ ${data.alert}`, 'warning');
+        setTimeout(() => window.location.href = 'dashboard.html', 3000);
+      } else {
+        showAlert('register-alert', `Account created! Wallet ID: ${data.user.walletId}. Redirecting...`, 'success');
+        setTimeout(() => window.location.href = 'dashboard.html', 1500);
+      }
+    } catch (err) {
+      showAlert('register-alert', 'Cannot connect to server. Make sure the backend is running on port 5000.');
+    } finally {
+      setLoading('reg-btn', 'reg-spinner', 'reg-btn-text', false);
+    }
+  }
+
+  // Auto-scroll to register section
+  if (window.location.hash === '#register') {
+    setTimeout(() => document.getElementById('register')?.scrollIntoView({ behavior: 'smooth' }), 100);
+  }
+</script>
+</body>
+</html>
